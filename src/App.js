@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import logo from "./logo.svg";
 import { styled, createGlobalStyle } from "styled-components";
-import { range } from "lodash";
 import "./App.css";
-import sideBarSvg from "./bg-sidebar-desktop.svg";
+import desktopSideBarSvg from "./bg-sidebar-desktop.svg";
+import mobileSideBarSvg from "./bg-sidebar-mobile.svg";
 
 const GlobalStyles = createGlobalStyle`
   #root {
@@ -29,18 +28,27 @@ const Wrapper = styled.div`
   margin-top: 30px;
   margin-left: 30px;
   display: flex;
+  flex-direction: column;
   gap: 20px;
   z-index: 10;
-  flex-direction: column;
   width: 153px;
   height: 228px;
+  @media (max-width: 500px) {
+    position: absolute;
+    flex-direction: row; // mobile
+    margin: revert;
+    top: 32px;
+    gap: 16px;
+    width: 180px;
+    height: 33px;
+  }
 `;
 
 const StepWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 7px;
   height: 33px;
+  gap: 16px;
 `;
 
 const StepCircles = styled.div`
@@ -61,17 +69,25 @@ const StepWordsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: baseline;
+  @media (max-width: 500px) {
+    display: none; // mobile
+  }
 `;
 
 const StepTag = styled.div`
-  font-size: 14px;
-  color: var(--neutral-white);
+  font-size: 12px;
+  font-family: var(--app-font-family);
+  font-weight: 400px;
+  color: var(--primary-light-blue);
 `;
 
 const StepDescription = styled.div`
-  font-size: var(--app-font-size);
-  color: var(--primary-light-blue);
+  font-size: 14px;
+  color: var(--neutral-white);
   font-weight: bold;
+  font-family: var(--app-font-family);
+  line-height: 16px;
+  margin-top: auto;
 `;
 
 const Step = ({ selectedStep = 1 }) => {
@@ -85,7 +101,7 @@ const Step = ({ selectedStep = 1 }) => {
               {index + 1}
             </StepCircles>
             <StepWordsWrapper>
-              <StepTag>Step {index + 1}</StepTag>
+              <StepTag>STEP {index + 1}</StepTag>
               <StepDescription>{description}</StepDescription>
             </StepWordsWrapper>
           </StepWrapper>
@@ -103,17 +119,41 @@ const Card = styled.div`
   height: 600px;
   width: 940px;
   border-radius: 10px;
+  @media (max-width: 500px) {
+    top: 99px;
+    left: 16px;
+    right: 16px;
+    margin: revert;
+    margin-right: auto;
+    margin-left: auto;
+    z-index: 10;
+    height: 376px;
+    width: 343px;
+  }
 `;
 
 const SideBar = styled.div`
   position: absolute;
-  background-image: url(${sideBarSvg});
+  background-image: url(${desktopSideBarSvg});
   border-radius: 5px;
   top: 16px;
   left: 16px;
   bottom: 16px;
   width: 274px;
   height: 568px;
+  @media (max-width: 500px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    inset: revert;
+    top: -99px;
+    left: -16px;
+    isolation: isolate;
+    z-index: 0;
+    background-image: url(${mobileSideBarSvg}); // mobile
+    width: 375px;
+    height: 172px;
+  }
 `;
 function App() {
   const [selectedStep, setSelectedStep] = useState(1);

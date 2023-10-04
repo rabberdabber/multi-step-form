@@ -2,9 +2,13 @@
   height: 100%;
 }
 .App {
-  background-color: var(--primary-light-blue);
+  background-color: var(--neutral-magnolia);
   height: 100%;
   text-align: center;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 .App-logo {
