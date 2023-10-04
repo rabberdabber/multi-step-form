@@ -3,6 +3,7 @@ import { styled, createGlobalStyle } from "styled-components";
 import "./App.css";
 import desktopSideBarSvg from "./bg-sidebar-desktop.svg";
 import mobileSideBarSvg from "./bg-sidebar-mobile.svg";
+import { useMediaQuery } from "@mantine/hooks";
 
 const GlobalStyles = createGlobalStyle`
   #root {
@@ -30,7 +31,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  z-index: 10;
   width: 153px;
   height: 228px;
   @media (max-width: 500px) {
@@ -38,6 +38,8 @@ const Wrapper = styled.div`
     flex-direction: row; // mobile
     margin: revert;
     top: 32px;
+    left: 98px;
+    right: 97px;
     gap: 16px;
     width: 180px;
     height: 33px;
@@ -142,14 +144,9 @@ const SideBar = styled.div`
   width: 274px;
   height: 568px;
   @media (max-width: 500px) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    inset: revert;
-    top: -99px;
-    left: -16px;
-    isolation: isolate;
-    z-index: 0;
+    inset: 0;
+    margin-left: auto;
+    margin-right: auto;
     background-image: url(${mobileSideBarSvg}); // mobile
     width: 375px;
     height: 172px;
@@ -157,6 +154,7 @@ const SideBar = styled.div`
 `;
 function App() {
   const [selectedStep, setSelectedStep] = useState(1);
+  const isMobile = useMediaQuery("(max-width: 500px)");
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -169,11 +167,20 @@ function App() {
     <>
       <GlobalStyles />
       <div className="App">
-        <Card>
-          <SideBar>
-            <Step selectedStep={selectedStep} />
-          </SideBar>
-        </Card>
+        {isMobile ? (
+          <>
+            <SideBar>
+              <Step selectedStep={selectedStep} />
+            </SideBar>
+            <Card />
+          </>
+        ) : (
+          <Card>
+            <SideBar>
+              <Step selectedStep={selectedStep} />
+            </SideBar>
+          </Card>
+        )}
       </div>
     </>
   );
