@@ -1,6 +1,7 @@
 
 # multi-step-form
 A multi step form created using React.
+My solution to  Frontend Mentor Challenge multi-step-form.
 =======
 # Getting Started with Create React App
 
