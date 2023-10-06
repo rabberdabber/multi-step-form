@@ -5,6 +5,7 @@ import Button, { buttonContext, ButtonProvider } from "./Button";
 import PlanChoice from "./PlanChoice";
 import ToggleSwitch from "./ToggleSwitch";
 import formInfos from "../formInfos.json";
+import AddOns from "./AddOns";
 
 const CardContentWrapper = styled.div`
   position: absolute;
@@ -170,6 +171,56 @@ const StepTwoContent = () => {
   );
 };
 
+const StepThreeContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 450px;
+  height: 276px;
+  gap: 17px;
+`;
+
+const StepThreeContent = () => {
+  const [checkedMultiPlayer, setCheckedMultiPlayer] = useState(true);
+  const [checkedStorage, setCheckedStorage] = useState(true);
+  const [checkedCustom, setCheckedCustom] = useState(true);
+
+  return (
+    <StepThreeContentWrapper>
+      <AddOns
+        checked={checkedMultiPlayer}
+        setChecked={setCheckedMultiPlayer}
+        title="Online service"
+        details="Access to multiplayer games"
+        price="1"
+      />
+      <AddOns
+        checked={checkedStorage}
+        setChecked={setCheckedStorage}
+        title="Larger storage"
+        details="Extra 1TB of cloud save"
+        price="2"
+      />
+      <AddOns
+        checked={checkedCustom}
+        setChecked={setCheckedCustom}
+        title="Customizable profile"
+        details="Custom theme on your profile"
+        price="2"
+      />
+    </StepThreeContentWrapper>
+  );
+};
+
+const StepFourContentWrapper = () => {
+  return <></>;
+};
+
+const StepFourContent = () => {
+  return <StepFourContentWrapper></StepFourContentWrapper>;
+};
+
 export const CardContent = () => {
   const { page } = useContext(buttonContext);
   const headers = Object.keys(formInfos).map((index) => [
@@ -187,6 +238,8 @@ export const CardContent = () => {
       <StepFactory>
         {page === 1 && <StepOneContent />}
         {page === 2 && <StepTwoContent />}
+        {page === 3 && <StepThreeContent />}
+        {page === 4 && <StepFourContent />}
       </StepFactory>
     </CardContentWrapper>
   );
