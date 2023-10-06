@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import desktopSideBarSvg from "../bg-sidebar-desktop.svg";
-import mobileSideBarSvg from "../bg-sidebar-mobile.svg";
+import desktopSideBarSvg from "../assets/images/bg-sidebar-desktop.svg";
+import mobileSideBarSvg from "../assets/images/bg-sidebar-mobile.svg";
 import formInfos from "../formInfos.json";
+import { buttonContext } from "./Button";
 
 const Wrapper = styled.div`
   margin-top: 30px;
@@ -71,7 +72,8 @@ const StepDescription = styled.div`
   margin-top: auto;
 `;
 
-const SideBarSteps = ({ selectedStep = 1 }) => {
+const SideBarSteps = () => {
+  const { page } = useContext(buttonContext);
   const stepTitles = Object.keys(formInfos).map(
     (index) => formInfos[index.toString()].stepTitle
   );
@@ -80,7 +82,7 @@ const SideBarSteps = ({ selectedStep = 1 }) => {
       {stepTitles.map((description, index) => {
         return (
           <StepWrapper key={index + 1}>
-            <StepCircles isSelected={selectedStep === index + 1}>
+            <StepCircles isSelected={page === index + 1}>
               {index + 1}
             </StepCircles>
             <StepWordsWrapper>

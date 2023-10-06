@@ -15,6 +15,11 @@ const InputWrapper = styled.input`
   height: 48px;
   border-radius: 8px;
   margin-top: 8px;
+  font-family: var(--app-font-family);
+  color: var(--neutral-cool-gray);
+  font-weight: var(--app-font-medium);
+  font-size: var(--app-font-size);
+  padding: 12px 16px;
   border: 1px solid
     ${(props) =>
       props.warning ? "var(--red-errors)" : "var(--neutral-cool-gray)"};

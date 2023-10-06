@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
 import { createGlobalStyle } from "styled-components";
 import "./App.css";
 import { useMediaQuery } from "@mantine/hooks";
 import Card, { CardContent } from "./components/Card";
 import SideBarSteps, { SideBar } from "./components/SideBar";
-import formInfos from "./formInfos.json";
+import { ButtonProvider, buttonContext } from "./components/Button";
+import { useContext } from "react";
 
 const GlobalStyles = createGlobalStyle`
   #root {
@@ -22,52 +22,39 @@ const GlobalStyles = createGlobalStyle`
     --app-disabled-button-color: hsl(213, 72%, 31%);
     --app-font-size: 16px;
     --app-font-family: 'Ubuntu';
-    --app-font-weight-small: 400;
-    --app-font-weight-medium: 500;
-    --app-font-weight-large: 700;
+    --app-font-small: 400;
+    --app-font-medium: 500;
+    --app-font-large: 700;
   }
 `;
 
 function App() {
-  const [selectedStep, setSelectedStep] = useState(1);
   const isMobile = useMediaQuery("(max-width: 500px)");
-  const headers = Object.keys(formInfos).map((index) => [
-    formInfos[index.toString()].title,
-    formInfos[index.toString()].description,
-  ]);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setSelectedStep((selectedStep) => (selectedStep % 4) + 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
+  const { page } = useContext(buttonContext);
 
   return (
-    <>
+    <ButtonProvider>
       <GlobalStyles />
       <div className="App">
         {isMobile ? (
           <>
             <SideBar>
-              <SideBarSteps selectedStep={selectedStep} />
+              <SideBarSteps page={page} />
             </SideBar>
             <Card />
           </>
         ) : (
-          <Card>
-            <CardContent
-              title={headers[selectedStep - 1][0]}
-              description={headers[selectedStep - 1][1]}
-            />
-            <SideBar>
-              <SideBarSteps selectedStep={selectedStep} />
-            </SideBar>
-          </Card>
+          <>
+            <Card>
+              <CardContent />
+              <SideBar>
+                <SideBarSteps page={page} />
+              </SideBar>
+            </Card>
+          </>
         )}
       </div>
-    </>
+    </ButtonProvider>
   );
 }
 

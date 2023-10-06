@@ -1,7 +1,10 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import styled from "styled-components";
 import TextInput, { StepOneInputWrapper } from "./TextInput";
-import Button from "./Button";
+import Button, { buttonContext, ButtonProvider } from "./Button";
+import PlanChoice from "./PlanChoice";
+import ToggleSwitch from "./ToggleSwitch";
+import formInfos from "../formInfos.json";
 
 const CardContentWrapper = styled.div`
   position: absolute;
@@ -39,17 +42,47 @@ const CardHeaderDescription = styled.p`
   width: max-content;
 `;
 
-export const CardContent = ({ title, description }) => {
+const StepFactory = ({ children }) => {
+  const { page, setPage, isDisabled, setButtonPressed } =
+    useContext(buttonContext);
+
+  const onClickNext = useCallback(() => {
+    setButtonPressed(true);
+    if (!isDisabled) {
+      setPage((page) => (page % 4) + 1);
+    }
+  }, [isDisabled]);
+
+  const onClickPrev = useCallback(() => {
+    setButtonPressed(true);
+    if (!isDisabled) {
+      setPage((page) => (page % 4) - 1);
+    }
+  }, [isDisabled]);
+  return (
+    <>
+      {children}
+      {page !== 1 && (
+        <Button type="previous" onClick={onClickPrev}>
+          Go Back
+        </Button>
+      )}
+      <Button type="next" isDisabled={isDisabled} onClick={onClickNext}>
+        Next Step
+      </Button>
+    </>
+  );
+};
+
+const StepOneContent = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const isNameEmpty = name === "";
   const isEmailEmpty = email === "";
   const isPhoneEmpty = phone === "";
-  const isButtonDisabled = [isNameEmpty, isEmailEmpty, isPhoneEmpty].includes(
-    true
-  );
-  const [buttonPressed, setButtonPressed] = useState(false);
+  const { buttonPressed, setIsDisabled, setButtonPressed } =
+    useContext(buttonContext);
   const setNameUpdated = useCallback((name) => {
     setButtonPressed(false);
     setName(name);
@@ -63,38 +96,98 @@ export const CardContent = ({ title, description }) => {
     setPhone(name);
   });
 
+  if ([isNameEmpty, isEmailEmpty, isPhoneEmpty].includes(true)) {
+    setIsDisabled(true);
+  } else {
+    setIsDisabled(false);
+  }
+
+  return (
+    <StepOneInputWrapper>
+      <TextInput
+        label="Name"
+        input={name}
+        setInput={setNameUpdated}
+        warning={buttonPressed && isNameEmpty}
+      />
+      <TextInput
+        label="Email Address"
+        input={email}
+        setInput={setEmailUpdated}
+        warning={buttonPressed && isEmailEmpty}
+      />
+      <TextInput
+        label="Phone Number"
+        input={phone}
+        setInput={setPhoneUpdated}
+        warning={buttonPressed && isPhoneEmpty}
+      />
+    </StepOneInputWrapper>
+  );
+};
+
+const StepTwoContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 450px;
+  height: 240px;
+`;
+
+const PlanChoiceWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+  justify-content: center;
+  width: 450px;
+  height: 160px;
+`;
+
+const DurationChoiceWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 13px;
+  width: 450px;
+  height: 48px;
+  gap: 24px;
+`;
+
+const StepTwoContent = () => {
+  return (
+    <StepTwoContentWrapper>
+      <PlanChoiceWrapper>
+        <PlanChoice type="Arcade" price={9} />
+        <PlanChoice type="Advanced" price={12} />
+        <PlanChoice type="Pro" price={15} />
+      </PlanChoiceWrapper>
+      <DurationChoiceWrapper>
+        <ToggleSwitch leftText="Monthly" rightText="Yearly" />
+      </DurationChoiceWrapper>
+    </StepTwoContentWrapper>
+  );
+};
+
+export const CardContent = () => {
+  const { page } = useContext(buttonContext);
+  const headers = Object.keys(formInfos).map((index) => [
+    formInfos[index.toString()].title,
+    formInfos[index.toString()].description,
+  ]);
+
+  const [title, description] = headers[page - 1];
   return (
     <CardContentWrapper>
       <CardHeaderWrapper>
         <CardHeaderTitle>{title}</CardHeaderTitle>
         <CardHeaderDescription>{description}</CardHeaderDescription>
       </CardHeaderWrapper>
-      <StepOneInputWrapper>
-        <TextInput
-          label="Name"
-          input={name}
-          setInput={setNameUpdated}
-          warning={buttonPressed && isNameEmpty}
-        />
-        <TextInput
-          label="Email Address"
-          input={email}
-          setInput={setEmailUpdated}
-          warning={buttonPressed && isEmailEmpty}
-        />
-        <TextInput
-          label="Phone Number"
-          input={phone}
-          setInput={setPhoneUpdated}
-          warning={buttonPressed && isPhoneEmpty}
-        />
-      </StepOneInputWrapper>
-      <Button
-        isDisabled={isButtonDisabled}
-        onClick={() => setButtonPressed(true)}
-      >
-        Next Step
-      </Button>
+      <StepFactory>
+        {page === 1 && <StepOneContent />}
+        {page === 2 && <StepTwoContent />}
+      </StepFactory>
     </CardContentWrapper>
   );
 };
