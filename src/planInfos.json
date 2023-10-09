@@ -1,0 +1,24 @@
+{
+    "Arcade": {
+        "yearlyMonthFree": 2,
+        "price": {
+            "yearly": 90,
+            "monthly": 9
+        }
+    },
+    "Advanced": {
+        "yearlyMonthFree": 2,
+        "price": {
+            "yearly": 120,
+            "monthly": 12
+        }
+
+    },
+    "Pro": {
+        "yearlyMonthFree": 2,
+        "price": {
+            "yearly": 150,
+            "monthly": 15
+        }
+    }
+}
