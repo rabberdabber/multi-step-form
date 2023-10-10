@@ -2,9 +2,11 @@
   height: 100%;
 }
 .App {
-  background-color: var(--primary-light-blue);
   height: 100%;
   text-align: center;
+  @media (max-width: 500px) {
+    height: calc(100% - 72px);
+  }
 }
 
 * {

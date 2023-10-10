@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const ButtonWrapper = styled.button`
@@ -11,6 +11,13 @@ const ButtonWrapper = styled.button`
   height: 48px;
   bottom: 32px;
   border-width: 0px;
+  @media (max-width: 500px) {
+    position: fixed;
+    width: 97px;
+    height: 40px;
+    border-radius: 4px;
+    bottom: 16px;
+  }
 `;
 
 export const NextButton = styled(ButtonWrapper)`
@@ -20,12 +27,18 @@ export const NextButton = styled(ButtonWrapper)`
       : "var(--primary-marine-blue)"};
   right: 0px;
   color: var(--neutral-white);
+  @media (max-width: 500px) {
+    right: 16px;
+  }
 `;
 
 export const PreviousButton = styled(ButtonWrapper)`
   background-color: var(--neutral-white);
   color: var(--neutral-cool-gray);
   left: 0px;
+  @media (max-width: 500px) {
+    left: 16px;
+  }
 `;
 
 const TextWrapper = styled.p`
@@ -40,35 +53,6 @@ export const Button = ({ type = "next", children, ...buttonProps }) => {
     <ButtonType {...buttonProps}>
       <TextWrapper>{children}</TextWrapper>
     </ButtonType>
-  );
-};
-
-export const buttonContext = createContext({
-  page: 1,
-  isDisabled: false,
-  buttonPressed: false,
-  setIsDisabled: () => {},
-  setButtonPressed: () => {},
-});
-
-export const ButtonProvider = ({ children }) => {
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [buttonPressed, setButtonPressed] = useState(false);
-  const [page, setPage] = useState(1);
-
-  const contextValue = {
-    page,
-    setPage,
-    isDisabled,
-    buttonPressed,
-    setIsDisabled,
-    setButtonPressed,
-  };
-
-  return (
-    <buttonContext.Provider value={contextValue}>
-      {children}
-    </buttonContext.Provider>
   );
 };
 

@@ -1,11 +1,15 @@
-import React, { useState, useCallback, useContext } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import TextInput, { StepOneInputWrapper } from "./TextInput";
-import Button, { buttonContext, ButtonProvider } from "./Button";
-import PlanChoice from "./PlanChoice";
-import ToggleSwitch from "./ToggleSwitch";
+import buttonContext from "../contexts/button/context.js";
+import UserProvider from "../contexts/user/provider.js";
 import formInfos from "../formInfos.json";
-import AddOns from "./AddOns";
+import StepFactory, {
+  StepOneContent,
+  StepTwoContent,
+  StepThreeContent,
+  StepFourContent,
+  StepFourContentOnConfirm,
+} from "./stepContents/index.js";
 
 const CardContentWrapper = styled.div`
   position: absolute;
@@ -16,232 +20,92 @@ const CardContentWrapper = styled.div`
   top: 56px;
   right: 100px;
   height: calc(100% - 56px);
+  @media (max-width: 500px) {
+    top: 32px;
+    left: 24px;
+    right: 24px;
+    height: 312px;
+    width: 295px;
+  }
+`;
+
+const CardContentWrapperOnConfirm = styled(CardContentWrapper)`
+  justify-content: center;
+  align-items: center;
 `;
 
 const CardHeaderWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
+  justify-content: space-between;
   align-items: baseline;
-  width: 450px;
+  width: var(--card-content-width);
   height: 68px;
+  gap: 8px;
+  @media (max-width: 500px) {
+    width: 295px;
+    height: 87px;
+    gap: 2px;
+  }
 `;
 
-const CardHeaderTitle = styled.p`
-  margin: 0;
-  font-size: 26px;
+const CardHeaderTitle = styled.h1`
+  margin: 0px;
   color: var(--primary-marine-blue);
   font-weight: bold;
+  line-height: 37px;
+  @media (max-width: 500px) {
+    font-size: 24px;
+    line-height: 28px;
+  }
 `;
 
-const CardHeaderDescription = styled.p`
-  margin: 0;
+const CardHeaderDescription = styled.body`
+  margin: 0px;
+  padding: 0px;
   margin-top: auto;
   font-size: 16px;
   color: var(--neutral-cool-gray);
   width: max-content;
-`;
-
-const StepFactory = ({ children }) => {
-  const { page, setPage, isDisabled, setButtonPressed } =
-    useContext(buttonContext);
-
-  const onClickNext = useCallback(() => {
-    setButtonPressed(true);
-    if (!isDisabled) {
-      setPage((page) => (page % 4) + 1);
-    }
-  }, [isDisabled]);
-
-  const onClickPrev = useCallback(() => {
-    setButtonPressed(true);
-    if (!isDisabled) {
-      setPage((page) => (page % 4) - 1);
-    }
-  }, [isDisabled]);
-  return (
-    <>
-      {children}
-      {page !== 1 && (
-        <Button type="previous" onClick={onClickPrev}>
-          Go Back
-        </Button>
-      )}
-      <Button type="next" isDisabled={isDisabled} onClick={onClickNext}>
-        Next Step
-      </Button>
-    </>
-  );
-};
-
-const StepOneContent = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const isNameEmpty = name === "";
-  const isEmailEmpty = email === "";
-  const isPhoneEmpty = phone === "";
-  const { buttonPressed, setIsDisabled, setButtonPressed } =
-    useContext(buttonContext);
-  const setNameUpdated = useCallback((name) => {
-    setButtonPressed(false);
-    setName(name);
-  });
-  const setEmailUpdated = useCallback((name) => {
-    setButtonPressed(false);
-    setEmail(name);
-  });
-  const setPhoneUpdated = useCallback((name) => {
-    setButtonPressed(false);
-    setPhone(name);
-  });
-
-  if ([isNameEmpty, isEmailEmpty, isPhoneEmpty].includes(true)) {
-    setIsDisabled(true);
-  } else {
-    setIsDisabled(false);
+  line-height: 25px;
+  @media (max-width: 500px) {
+    text-wrap: wrap;
+    height: 50px;
+    inline-size: var(--card-content-width);
+    text-align: left;
   }
-
-  return (
-    <StepOneInputWrapper>
-      <TextInput
-        label="Name"
-        input={name}
-        setInput={setNameUpdated}
-        warning={buttonPressed && isNameEmpty}
-      />
-      <TextInput
-        label="Email Address"
-        input={email}
-        setInput={setEmailUpdated}
-        warning={buttonPressed && isEmailEmpty}
-      />
-      <TextInput
-        label="Phone Number"
-        input={phone}
-        setInput={setPhoneUpdated}
-        warning={buttonPressed && isPhoneEmpty}
-      />
-    </StepOneInputWrapper>
-  );
-};
-
-const StepTwoContentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 450px;
-  height: 240px;
 `;
-
-const PlanChoiceWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 18px;
-  justify-content: center;
-  width: 450px;
-  height: 160px;
-`;
-
-const DurationChoiceWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 13px;
-  width: 450px;
-  height: 48px;
-  gap: 24px;
-`;
-
-const StepTwoContent = () => {
-  return (
-    <StepTwoContentWrapper>
-      <PlanChoiceWrapper>
-        <PlanChoice type="Arcade" price={9} />
-        <PlanChoice type="Advanced" price={12} />
-        <PlanChoice type="Pro" price={15} />
-      </PlanChoiceWrapper>
-      <DurationChoiceWrapper>
-        <ToggleSwitch leftText="Monthly" rightText="Yearly" />
-      </DurationChoiceWrapper>
-    </StepTwoContentWrapper>
-  );
-};
-
-const StepThreeContentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 450px;
-  height: 276px;
-  gap: 17px;
-`;
-
-const StepThreeContent = () => {
-  const [checkedMultiPlayer, setCheckedMultiPlayer] = useState(true);
-  const [checkedStorage, setCheckedStorage] = useState(true);
-  const [checkedCustom, setCheckedCustom] = useState(true);
-
-  return (
-    <StepThreeContentWrapper>
-      <AddOns
-        checked={checkedMultiPlayer}
-        setChecked={setCheckedMultiPlayer}
-        title="Online service"
-        details="Access to multiplayer games"
-        price="1"
-      />
-      <AddOns
-        checked={checkedStorage}
-        setChecked={setCheckedStorage}
-        title="Larger storage"
-        details="Extra 1TB of cloud save"
-        price="2"
-      />
-      <AddOns
-        checked={checkedCustom}
-        setChecked={setCheckedCustom}
-        title="Customizable profile"
-        details="Custom theme on your profile"
-        price="2"
-      />
-    </StepThreeContentWrapper>
-  );
-};
-
-const StepFourContentWrapper = () => {
-  return <></>;
-};
-
-const StepFourContent = () => {
-  return <StepFourContentWrapper></StepFourContentWrapper>;
-};
 
 export const CardContent = () => {
-  const { page } = useContext(buttonContext);
+  const { page, confirmed } = useContext(buttonContext);
   const headers = Object.keys(formInfos).map((index) => [
     formInfos[index.toString()].title,
     formInfos[index.toString()].description,
   ]);
-
   const [title, description] = headers[page - 1];
   return (
-    <CardContentWrapper>
-      <CardHeaderWrapper>
-        <CardHeaderTitle>{title}</CardHeaderTitle>
-        <CardHeaderDescription>{description}</CardHeaderDescription>
-      </CardHeaderWrapper>
-      <StepFactory>
-        {page === 1 && <StepOneContent />}
-        {page === 2 && <StepTwoContent />}
-        {page === 3 && <StepThreeContent />}
-        {page === 4 && <StepFourContent />}
-      </StepFactory>
-    </CardContentWrapper>
+    <UserProvider>
+      {confirmed ? (
+        <>
+          <CardContentWrapperOnConfirm>
+            <StepFourContentOnConfirm />
+          </CardContentWrapperOnConfirm>
+        </>
+      ) : (
+        <CardContentWrapper>
+          <CardHeaderWrapper>
+            <CardHeaderTitle>{title}</CardHeaderTitle>
+            <CardHeaderDescription>{description}</CardHeaderDescription>
+          </CardHeaderWrapper>
+          <StepFactory>
+            {page === 1 && <StepOneContent />}
+            {page === 2 && <StepTwoContent />}
+            {page === 3 && <StepThreeContent />}
+            {page === 4 && <StepFourContent />}
+          </StepFactory>
+        </CardContentWrapper>
+      )}
+    </UserProvider>
   );
 };
 
@@ -264,7 +128,8 @@ const Card = styled.div`
     margin-right: auto;
     margin-left: auto;
     z-index: 10;
-    height: 376px;
+    min-height: 376px;
+    max-height: 500px;
     width: 343px;
   }
 `;

@@ -1,15 +1,6 @@
 import React, { useId } from "react";
 import styled from "styled-components";
 
-export const StepOneInputWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  width: 450px;
-  height: 264px;
-  gap: 24px;
-`;
-
 const InputWrapper = styled.input`
   width: 450px;
   height: 48px;
@@ -25,6 +16,12 @@ const InputWrapper = styled.input`
       props.warning ? "var(--red-errors)" : "var(--neutral-cool-gray)"};
   &:focus {
     border-color: var(--primary-purplish-blue);
+  }
+  @media (max-width: 500px) {
+    margin-top: 0px;
+    border-radius: 4px;
+    height: 40px;
+    width: var(--card-content-width);
   }
 `;
 
@@ -57,6 +54,15 @@ const CustomWarning = styled.p`
 
 const CustomForm = styled.form`
   margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  width: var(--card-content-width);
+  height: 203px;
+  @media (max-width: 500px) {
+    height: 57px;
+  }
 `;
 
 const TextInput = ({

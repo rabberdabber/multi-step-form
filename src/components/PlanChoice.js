@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import ArcadeSvg from "../assets/images/icon-arcade.svg";
 import ProSvg from "../assets/images/icon-pro.svg";
 import AdvancedSvg from "../assets/images/icon-advanced.svg";
+import userContext from "../contexts/user/context";
 
 const toSvg = (name) => {
   switch (name) {
@@ -27,10 +28,23 @@ const PlanChoiceWrapper = styled.button`
   width: 138px;
   height: 160px;
   border-radius: 8px;
-  border: 1px solid tomato;
+  border: 1px solid
+    ${(props) =>
+      props.isSelected
+        ? "var(--primary-purplish-blue)"
+        : "var(--neutral-cool-gray)"};
   padding: 16px;
   &:focus {
     border-color: var(--primary-purplish-blue);
+  }
+  background: var(--neutral-alabaster);
+  @media (max-width: 500px) {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 14px;
+    width: 295px;
+    height: 77px;
   }
 `;
 
@@ -47,8 +61,10 @@ const PlanTypeBox = styled.p`
   flex-direction: column;
   justify-content: center;
   align-items: baseline;
+  gap: 7px;
   width: 53px;
-  height: 45px;
+  min-height: 45px;
+  max-height: 68px;
   margin: 0px;
 `;
 
@@ -70,13 +86,27 @@ const PlanPriceText = styled.p`
   color: var(--neutral-cool-gray);
 `;
 
-const PlanChoice = ({ type = "Advanced", price = 9 }) => {
+const PlanDiscount = styled.p`
+  width: max-content;
+  margin: 0px;
+  font-family: var(--app-font-family);
+  font-size: 10px;
+  line-height: 14px;
+`;
+
+const PlanChoice = ({ type = "Advanced", price = 9, yearlyMonthFree }) => {
+  const { plan, isMonthly, setPlan } = useContext(userContext);
   return (
-    <PlanChoiceWrapper>
+    <PlanChoiceWrapper isSelected={plan === type} onClick={() => setPlan(type)}>
       <PlanSVGCircle type={type} />
       <PlanTypeBox>
         <PlanTypeText>{type}</PlanTypeText>
-        <PlanPriceText>${price}/mo</PlanPriceText>
+        <PlanPriceText>
+          ${price}/{isMonthly ? "mo" : "yr"}
+        </PlanPriceText>
+        {!isMonthly && (
+          <PlanDiscount>{yearlyMonthFree} months free</PlanDiscount>
+        )}
       </PlanTypeBox>
     </PlanChoiceWrapper>
   );

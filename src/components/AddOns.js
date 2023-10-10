@@ -1,5 +1,6 @@
-import React, { useId } from "react";
+import React, { useContext, useId } from "react";
 import styled from "styled-components";
+import userContext from "../contexts/user/context";
 
 export const AddOnsWrapper = styled.button`
   display: flex;
@@ -7,16 +8,19 @@ export const AddOnsWrapper = styled.button`
   align-items: center;
   gap: 24px;
   height: 81px;
-  width: 450px;
+  width: var(--card-content-width);
   border-radius: 8px;
   border: 1px solid
     ${(props) =>
       props.checked
         ? "var(--primary-purplish-blue)"
         : "var(--neutral-cool-gray)"};
-`;
 
-export const CheckMarkWrapper = styled.button``;
+  background: var(--neutral-alabaster);
+  @media (max-width: 500px) {
+    gap: 16px;
+  }
+`;
 
 export const InputWrapper = styled.input`
   display: inline;
@@ -30,10 +34,14 @@ export const InputWrapper = styled.input`
       : "var(--neutral-cool-gray)"};
 `;
 
+export const FormWrapper = styled.form`
+  margin-left: 24px;
+`;
+
 const CheckBox = ({ checked, setChecked }) => {
   const id = useId();
   return (
-    <form
+    <FormWrapper
       onSubmit={(event) => {
         event.preventDefault();
       }}
@@ -46,7 +54,7 @@ const CheckBox = ({ checked, setChecked }) => {
           setChecked(event.target.checked);
         }}
       />
-    </form>
+    </FormWrapper>
   );
 };
 
@@ -64,6 +72,9 @@ export const AddOnTitle = styled.p`
   color: var(--primary-marine-blue);
   font-family: var(--app-font-family);
   font-size: 16px;
+  @media (max-width: 500px) {
+    font-size: 14px;
+  }
 `;
 
 export const AddOnDetails = styled.p`
@@ -74,6 +85,9 @@ export const AddOnDetails = styled.p`
   font-size: 14px;
   line-height: 20px;
   font-weight: var(--app-font-medium);
+  @media (max-width: 500px) {
+    font-size: 12px;
+  }
 `;
 
 const AddOnPrice = styled.p`
@@ -84,9 +98,14 @@ const AddOnPrice = styled.p`
   font-family: var(--app-font-family);
   font-size: 16px;
   line-height: 20px;
+  @media (max-width: 500px) {
+    font-size: 12px;
+    margin-right: 6px;
+  }
 `;
 
 const AddOns = ({ checked, setChecked, title, details, price }) => {
+  const { isMonthly } = useContext(userContext);
   return (
     <AddOnsWrapper checked={checked}>
       <CheckBox checked={checked} setChecked={setChecked} />
@@ -94,7 +113,9 @@ const AddOns = ({ checked, setChecked, title, details, price }) => {
         <AddOnTitle>{title}</AddOnTitle>
         <AddOnDetails>{details}</AddOnDetails>
       </AddOnTextWrapper>
-      <AddOnPrice>+${price}/mo</AddOnPrice>
+      <AddOnPrice>
+        +${isMonthly ? `${price / 10}/mo` : `${price}/yr`}
+      </AddOnPrice>
     </AddOnsWrapper>
   );
 };

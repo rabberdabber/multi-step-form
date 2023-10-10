@@ -1,10 +1,11 @@
+import React, { useContext } from "react";
 import { createGlobalStyle } from "styled-components";
 import "./App.css";
 import { useMediaQuery } from "@mantine/hooks";
 import Card, { CardContent } from "./components/Card";
 import SideBarSteps, { SideBar } from "./components/SideBar";
-import { ButtonProvider, buttonContext } from "./components/Button";
-import { useContext } from "react";
+import ButtonProvider from "./contexts/button/provider";
+import buttonContext from "./contexts/button/context";
 
 const GlobalStyles = createGlobalStyle`
   #root {
@@ -25,7 +26,25 @@ const GlobalStyles = createGlobalStyle`
     --app-font-small: 400;
     --app-font-medium: 500;
     --app-font-large: 700;
+    --card-content-width: 450px;
   }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  p {
+    font-family: var(--app-font-family);
+    font-weight: var(--app-font-medium);
+  }
+  .App {
+    /* height: calc(100%-72px); */
+    background-color:  var(--neutral-magnolia);
+    @media (max-width: 500px) {
+      --card-content-width: 295px;
+    }
+  }
+
 `;
 
 function App() {
@@ -41,17 +60,17 @@ function App() {
             <SideBar>
               <SideBarSteps page={page} />
             </SideBar>
-            <Card />
-          </>
-        ) : (
-          <>
             <Card>
               <CardContent />
-              <SideBar>
-                <SideBarSteps page={page} />
-              </SideBar>
             </Card>
           </>
+        ) : (
+          <Card>
+            <CardContent />
+            <SideBar>
+              <SideBarSteps page={page} />
+            </SideBar>
+          </Card>
         )}
       </div>
     </ButtonProvider>

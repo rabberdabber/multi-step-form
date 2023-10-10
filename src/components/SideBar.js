@@ -3,7 +3,7 @@ import styled from "styled-components";
 import desktopSideBarSvg from "../assets/images/bg-sidebar-desktop.svg";
 import mobileSideBarSvg from "../assets/images/bg-sidebar-mobile.svg";
 import formInfos from "../formInfos.json";
-import { buttonContext } from "./Button";
+import buttonContext from "../contexts/button/context.js";
 
 const Wrapper = styled.div`
   margin-top: 30px;
