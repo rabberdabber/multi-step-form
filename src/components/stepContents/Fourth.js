@@ -89,7 +89,7 @@ const PlanSingleSummary = () => {
         <PlanHeader>
           {plan} ({isMonthly ? "Monthly" : "Yearly"})
         </PlanHeader>
-        <PlanChangeLink onClick={() => setPage((page) => page - 1)}>
+        <PlanChangeLink onClick={() => setPage((page) => page - 2)}>
           Change
         </PlanChangeLink>
       </PlanSingleSummaryHeader>
