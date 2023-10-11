@@ -16,7 +16,8 @@ export const AddOnsWrapper = styled.button`
         ? "var(--primary-purplish-blue)"
         : "var(--neutral-cool-gray)"};
 
-  background: var(--neutral-alabaster);
+  background-color: ${(props) =>
+    props.checked ? "var(--neutral-magnolia" : "var(--neutral-alabaster)"};
   @media (max-width: 500px) {
     gap: 16px;
   }

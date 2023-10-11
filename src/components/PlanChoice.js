@@ -37,7 +37,8 @@ const PlanChoiceWrapper = styled.button`
   &:focus {
     border-color: var(--primary-purplish-blue);
   }
-  background: var(--neutral-alabaster);
+  background-color: ${(props) =>
+    props.isSelected ? "var(--neutral-magnolia)" : "var(--neutral-alabaster)"};
   @media (max-width: 500px) {
     flex-direction: row;
     justify-content: flex-start;
