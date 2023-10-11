@@ -226,7 +226,9 @@ const OnConfirmationThanks = styled.p`
 const OnConfirmationMessage = styled.p`
   margin: 0px;
   color: var(--neutral-cool-gray);
+  font-family: var(--app-font-family);
   font-size: 16px;
+  height: 75px;
 `;
 
 const OnConfirmationContent = () => {

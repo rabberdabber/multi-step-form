@@ -15,34 +15,11 @@ const StepThreeContentWrapper = styled.div`
 `;
 
 const StepThreeContent = () => {
-  const { addOns, setAddOns } = useContext(userContext);
-  const { multiplayer, extraStorage, customProfile } = addOns;
-  const mapping = {
-    multiplayer,
-    extraStorage,
-    customProfile,
-  };
   return (
     <StepThreeContentWrapper>
-      {Object.entries(addOnsInfos).map(
-        ([key, { title, description, price }]) => {
-          return (
-            <AddOns
-              key={key}
-              checked={mapping[key]}
-              setChecked={(param) => {
-                setAddOns({
-                  ...addOns,
-                  [key]: param,
-                });
-              }}
-              title={title}
-              details={description}
-              price={price}
-            />
-          );
-        }
-      )}
+      {Object.keys(addOnsInfos).map((key) => {
+        return <AddOns key={key} name={key} />;
+      })}
     </StepThreeContentWrapper>
   );
 };

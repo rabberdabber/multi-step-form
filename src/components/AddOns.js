@@ -1,6 +1,7 @@
 import React, { useContext, useId } from "react";
 import styled from "styled-components";
 import userContext from "../contexts/user/context";
+import addOnsInfos from "../addOnsInfos.json";
 
 export const AddOnsWrapper = styled.button`
   display: flex;
@@ -105,8 +106,18 @@ const AddOnPrice = styled.p`
   }
 `;
 
-const AddOns = ({ checked, setChecked, title, details, price }) => {
-  const { isMonthly } = useContext(userContext);
+const AddOns = ({ name }) => {
+  const { isMonthly, addOns, setAddOns } = useContext(userContext);
+  const checked = addOns[name];
+  const setChecked = () =>
+    setAddOns((addOns) => {
+      return {
+        ...addOns,
+        [name]: !addOns[name],
+      };
+    });
+
+  const { title, description, price } = addOnsInfos[name];
   return (
     <AddOnsWrapper
       checked={checked}
@@ -115,7 +126,7 @@ const AddOns = ({ checked, setChecked, title, details, price }) => {
       <CheckBox checked={checked} setChecked={setChecked} />
       <AddOnTextWrapper>
         <AddOnTitle>{title}</AddOnTitle>
-        <AddOnDetails>{details}</AddOnDetails>
+        <AddOnDetails>{description}</AddOnDetails>
       </AddOnTextWrapper>
       <AddOnPrice>
         +${isMonthly ? `${price / 10}/mo` : `${price}/yr`}
