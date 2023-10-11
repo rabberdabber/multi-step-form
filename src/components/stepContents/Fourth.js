@@ -134,10 +134,12 @@ const NonTotalSummary = styled.div`
   background-color: var(--neutral-magnolia);
   border-radius: 8px;
   margin-bottom: 24px;
+  padding-bottom: 24px;
   @media (max-width: 500px) {
+    padding-bottom: 16px;
     gap: 12px;
-    min-height: 80px;
-    max-height: 150px;
+    min-height: 140px;
+    max-height: 240px;
   }
 `;
 
@@ -241,11 +243,15 @@ const OnConfirmationContent = () => {
   );
 };
 
+const StepFourOnConfirmWrapper = styled(StepFourContentWrapper)`
+  margin-top: calc(-1 * var(--card-margin-top));
+`;
+
 export const StepFourContentOnConfirm = () => {
   return (
-    <StepFourContentWrapper>
+    <StepFourOnConfirmWrapper>
       <OnConfirmationContent />
-    </StepFourContentWrapper>
+    </StepFourOnConfirmWrapper>
   );
 };
 const StepFourContent = () => {

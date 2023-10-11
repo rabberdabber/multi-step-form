@@ -17,14 +17,15 @@ const CardContentWrapper = styled.div`
   flex-direction: column;
   gap: 20px;
   left: 390px;
-  top: 56px;
+  top: var(--card-margin-top);
   right: 100px;
-  height: calc(100% - 56px);
+  height: calc(100% - var(--card-margin-top));
   @media (max-width: 500px) {
-    top: 32px;
+    --card-margin-top: 32px;
+    top: var(--card-margin-top);
     left: 24px;
     right: 24px;
-    height: 312px;
+    height: calc(100% - var(--card-margin-top));
     width: 295px;
   }
 `;

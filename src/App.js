@@ -27,6 +27,7 @@ const GlobalStyles = createGlobalStyle`
     --app-font-medium: 500;
     --app-font-large: 700;
     --card-content-width: 450px;
+    --card-margin-top: 56px;
   }
   * {
     box-sizing: border-box;
