@@ -108,7 +108,10 @@ const AddOnPrice = styled.p`
 const AddOns = ({ checked, setChecked, title, details, price }) => {
   const { isMonthly } = useContext(userContext);
   return (
-    <AddOnsWrapper checked={checked}>
+    <AddOnsWrapper
+      checked={checked}
+      onClick={() => setChecked((checked) => !checked)}
+    >
       <CheckBox checked={checked} setChecked={setChecked} />
       <AddOnTextWrapper>
         <AddOnTitle>{title}</AddOnTitle>
