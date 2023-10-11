@@ -48,18 +48,21 @@ const StepOneContent = () => {
         input={name}
         setInput={setNameUpdated}
         warning={buttonPressed && isNameEmpty}
+        placeholder="e.g. Stephen King"
       />
       <TextInput
         label="Email Address"
         input={email}
         setInput={setEmailUpdated}
         warning={buttonPressed && isEmailEmpty}
+        placeholder="e.g. stephenking@lorem.com"
       />
       <TextInput
         label="Phone Number"
         input={phone}
         setInput={setPhoneUpdated}
         warning={buttonPressed && isPhoneEmpty}
+        placeholder="e.g. +1 234 567 890"
       />
     </StepOneInputWrapper>
   );

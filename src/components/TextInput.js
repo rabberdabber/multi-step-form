@@ -71,6 +71,7 @@ const TextInput = ({
   setInput,
   warning = false,
   type = "text",
+  ...textProps
 }) => {
   const id = useId();
 
@@ -88,6 +89,7 @@ const TextInput = ({
           setInput(event.target.value);
         }}
         warning={warning}
+        {...textProps}
       />
     </CustomForm>
   );
